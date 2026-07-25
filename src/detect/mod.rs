@@ -59,6 +59,7 @@ pub enum Agent {
     Hermes,
     Kilo,
     Qodercli,
+    Ucode,
 }
 
 pub fn agent_label(agent: Agent) -> &'static str {
@@ -80,6 +81,7 @@ pub fn agent_label(agent: Agent) -> &'static str {
         Agent::Hermes => "hermes",
         Agent::Kilo => "kilo",
         Agent::Qodercli => "qodercli",
+        Agent::Ucode => "ucode",
     }
 }
 
@@ -103,6 +105,7 @@ pub fn parse_agent_label(agent: &str) -> Option<Agent> {
         "hermes" | "hermes-agent" => Some(Agent::Hermes),
         "kilo" | "kilo-code" | "kilo code" => Some(Agent::Kilo),
         "qodercli" | "qoderclicn" | "qoder" | "qodercn" => Some(Agent::Qodercli),
+        "ucode" | "ucode-agent" => Some(Agent::Ucode),
         _ => None,
     }
 }
@@ -130,6 +133,7 @@ pub fn identify_agent(process_name: &str) -> Option<Agent> {
         "hermes" | "hermes-agent" => Some(Agent::Hermes),
         "kilo" | "kilo-code" | "kilo code" => Some(Agent::Kilo),
         "qodercli" | "qoderclicn" | "qoder" | "qodercn" => Some(Agent::Qodercli),
+        "ucode" | "ucode-agent" => Some(Agent::Ucode),
         _ => None,
     }
 }
@@ -265,6 +269,11 @@ fn has_braille_spinner(content: &str) -> bool {
 #[cfg(test)]
 fn detect_qodercli(content: &str) -> AgentState {
     detect_state(Some(Agent::Qodercli), content)
+}
+
+#[cfg(test)]
+fn detect_ucode(content: &str) -> AgentState {
+    detect_state(Some(Agent::Ucode), content)
 }
 
 #[cfg(test)]

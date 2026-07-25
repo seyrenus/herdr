@@ -15,6 +15,7 @@ pub(super) mod kiro;
 pub(super) mod opencode;
 pub(super) mod pi;
 pub(super) mod qodercli;
+pub(super) mod ucode;
 
 use super::{Agent, AgentDetection, AgentState};
 
@@ -28,6 +29,7 @@ pub(super) fn detect(agent: Agent, screen_content: &str) -> AgentDetection {
         Agent::Antigravity => antigravity::detect(screen_content),
         Agent::Cline => cline::detect(screen_content),
         Agent::OpenCode => opencode::detect(screen_content),
+        Agent::Ucode => ucode::detect(screen_content),
         Agent::GithubCopilot => github_copilot::detect(screen_content),
         Agent::Kimi => kimi::detect(screen_content),
         Agent::Kiro => kiro::detect(screen_content),
