@@ -52,6 +52,7 @@ pub enum Agent {
     Omp,
     Mastracode,
     OpenCode,
+    Ucode,
     GithubCopilot,
     Kimi,
     Kiro,
@@ -65,7 +66,7 @@ pub enum Agent {
 }
 
 impl Agent {
-    pub const ALL: [Self; 21] = [
+    pub const ALL: [Self; 22] = [
         Self::Pi,
         Self::Claude,
         Self::Codex,
@@ -77,6 +78,7 @@ impl Agent {
         Self::Omp,
         Self::Mastracode,
         Self::OpenCode,
+        Self::Ucode,
         Self::GithubCopilot,
         Self::Kimi,
         Self::Kiro,
@@ -89,7 +91,7 @@ impl Agent {
         Self::Maki,
     ];
 
-    pub const SCREEN_MANIFEST_AGENTS: [Self; 19] = [
+    pub const SCREEN_MANIFEST_AGENTS: [Self; 20] = [
         Self::Pi,
         Self::Claude,
         Self::Codex,
@@ -99,6 +101,7 @@ impl Agent {
         Self::Antigravity,
         Self::Cline,
         Self::OpenCode,
+        Self::Ucode,
         Self::GithubCopilot,
         Self::Kimi,
         Self::Kiro,
@@ -125,6 +128,7 @@ pub fn agent_label(agent: Agent) -> &'static str {
         Agent::Omp => "omp",
         Agent::Mastracode => "mastracode",
         Agent::OpenCode => "opencode",
+        Agent::Ucode => "ucode",
         Agent::GithubCopilot => "copilot",
         Agent::Kimi => "kimi",
         Agent::Kiro => "kiro",
@@ -151,6 +155,7 @@ pub fn interactive_agent_executable(agent: Agent) -> &'static str {
         Agent::Omp => "omp",
         Agent::Mastracode => "mastracode",
         Agent::OpenCode => "opencode",
+        Agent::Ucode => "ucode",
         Agent::GithubCopilot => "copilot",
         Agent::Kimi => "kimi",
         Agent::Kiro => "kiro-cli",
@@ -187,6 +192,7 @@ fn lookup_agent(name: &str) -> Option<Agent> {
         "omp" => Some(Agent::Omp),
         "mastracode" | "mastra-code" | "mastra code" => Some(Agent::Mastracode),
         "opencode" | "open-code" => Some(Agent::OpenCode),
+        "ucode" | "ucode-agent" => Some(Agent::Ucode),
         "copilot" | "github-copilot" | "ghcs" => Some(Agent::GithubCopilot),
         "kimi" | "kimi-code" | "kimi code" => Some(Agent::Kimi),
         "kiro" | "kiro-cli" => Some(Agent::Kiro),
@@ -288,6 +294,7 @@ pub(crate) fn full_lifecycle_hook_authority(source: &str, agent_label: &str) -> 
             | ("herdr:mastracode", "mastracode")
             | ("herdr:hermes", "hermes")
             | ("herdr:opencode", "opencode")
+            | ("herdr:ucode", "ucode")
             | ("herdr:kilo", "kilo")
             | ("herdr:kimi", "kimi")
     )
@@ -711,6 +718,14 @@ mod tests {
     }
 
     #[test]
+    fn ucode_agent_label_and_executable() {
+        assert_eq!(parse_agent_label("ucode"), Some(Agent::Ucode));
+        assert_eq!(parse_agent_label("ucode-agent"), Some(Agent::Ucode));
+        assert_eq!(agent_label(Agent::Ucode), "ucode");
+        assert_eq!(interactive_agent_executable(Agent::Ucode), "ucode");
+    }
+
+    #[test]
     fn every_agent_label_round_trips_through_canonical_and_alias_parsers() {
         for agent in Agent::ALL {
             let label = agent_label(agent);
@@ -733,6 +748,7 @@ mod tests {
             (Agent::Omp, "omp"),
             (Agent::Mastracode, "mastracode"),
             (Agent::OpenCode, "opencode"),
+            (Agent::Ucode, "ucode"),
             (Agent::GithubCopilot, "copilot"),
             (Agent::Kimi, "kimi"),
             (Agent::Kiro, "kiro-cli"),
