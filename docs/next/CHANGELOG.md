@@ -40,6 +40,7 @@
 - `herdr config check` now reports unknown config keys with their full paths instead of treating ignored typos as valid configuration. (#1573)
 - Codex panes with customized static terminal titles now fall back to the live working footer instead of remaining idle, while OSC activity remains preferred. (#1563)
 - Grok panes now preserve working and blocked state from terminal signals and pinned background-work status instead of falling back to idle mid-turn.
+- Hyper panes are now detected as the Grok agent, including Hyper foreground-process aliases and Grok-compatible OSC titles.
 - OpenCode lifecycle reports are now serialized so out-of-order plugin events cannot leave an idle pane marked working. (#1519)
 - Kimi question prompts now report blocked until the user answers or dismisses them.
 - Pi lifecycle reporting now uses settled events, preventing transient message boundaries from publishing an idle state mid-turn.

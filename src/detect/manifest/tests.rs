@@ -868,6 +868,19 @@ fn codex_screen_working_fallback_ignores_interrupted_short_terminal() {
 }
 
 #[test]
+fn grok_compatible_hyper_osc_titles_are_idle() {
+    for title in ["hyper", "project - hyper", "project - hyper-build"] {
+        let result = osc_explain(Agent::Grok, "", title, "");
+        assert_eq!(result.state, AgentState::Idle, "title {title}");
+        assert_eq!(
+            result.matched_rule.as_ref().map(|r| r.id.as_str()),
+            Some("osc_title_idle")
+        );
+        assert!(result.visible_idle);
+    }
+}
+
+#[test]
 fn codex_osc_working_beats_weak_blocker_screen() {
     // A stale [y/n] on screen triggers weak_blocker at priority 600, but an
     // active braille spinner in the OSC title is priority 1050 — OSC wins.

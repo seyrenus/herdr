@@ -1,13 +1,14 @@
 id = "grok"
-version = "2026.07.16.2"
+version = "2026.07.28.1"
 min_engine_version = 3
-updated_at = "2026-07-16T00:00:00Z"
-aliases = ["grok-build"]
+updated_at = "2026-07-28T00:00:00Z"
+aliases = ["grok-build", "hyper", "hyper-build"]
 
-# Evidence: Grok Build 0.2.101 source and live pane reads.
+# Evidence: Grok Build 0.2.101 source and live pane reads. Hyper aliases are
+# treated as Grok-compatible fork entry points; the UI rules remain Grok-based.
 #
-# Grok emits OSC 0 titles by default. Idle is "grok" or
-# "<session> - grok". During a turn, the configured title gains a braille
+# Grok emits OSC 0 titles by default. Idle is "grok", "hyper", or
+# "<session> - <agent>". During a turn, the configured title gains a braille
 # spinner and activity text. Permission prompts add "⚠ Action Required";
 # that prefix blinks while the terminal is unfocused, so visible blocker
 # rules outrank the generic non-idle title rule.
@@ -99,7 +100,7 @@ state = "idle"
 priority = 1100
 region = "osc_title"
 visible_idle = true
-regex = ['(?:^| - )grok$']
+regex = ['(?:^| - )(?:grok|hyper|hyper-build)$']
 not = [
   { regex = ['[\x{2800}-\x{28FF}]'] },
 ]

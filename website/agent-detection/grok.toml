@@ -1,13 +1,14 @@
 id = "grok"
-version = "2026.07.16.1"
-min_engine_version = 2
-updated_at = "2026-07-16T00:00:00Z"
-aliases = ["grok-build"]
+version = "2026.07.28.1"
+min_engine_version = 3
+updated_at = "2026-07-28T00:00:00Z"
+aliases = ["grok-build", "hyper", "hyper-build"]
 
-# Evidence: Grok Build 0.2.101 source and live pane reads.
+# Evidence: Grok Build 0.2.101 source and live pane reads. Hyper aliases are
+# treated as Grok-compatible fork entry points; the UI rules remain Grok-based.
 #
-# Grok emits OSC 0 titles by default. Idle is "grok" or
-# "<session> - grok". During a turn, the configured title gains a braille
+# Grok emits OSC 0 titles by default. Idle is "grok", "hyper", or
+# "<session> - <agent>". During a turn, the configured title gains a braille
 # spinner and activity text. Permission prompts add "⚠ Action Required";
 # that prefix blinks while the terminal is unfocused, so visible blocker
 # rules outrank the generic non-idle title rule.
@@ -74,6 +75,17 @@ any = [
   { contains = ["←/→:scope"] },
 ]
 
+# Grok clears its OSC busy signals while background work runs. The first
+# non-empty row is pinned application chrome, where this animated chip shows
+# the number of running background tasks and disappears when the count is zero.
+[[rules]]
+id = "background_work_chip_working"
+state = "working"
+priority = 1170
+region = "top_non_empty_lines(1)"
+visible_working = true
+line_regex = ['[⋅:⸬⁙.·]\s+[1-9][0-9]*\s+│']
+
 [[rules]]
 id = "osc_progress_working"
 state = "working"
@@ -88,7 +100,7 @@ state = "idle"
 priority = 1100
 region = "osc_title"
 visible_idle = true
-regex = ['(?:^| - )grok$']
+regex = ['(?:^| - )(?:grok|hyper|hyper-build)$']
 not = [
   { regex = ['[\x{2800}-\x{28FF}]'] },
 ]

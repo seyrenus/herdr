@@ -48,6 +48,43 @@ fn agent_version_requirement_only_set_for_kimi() {
 }
 
 #[test]
+fn grok_integration_accepts_hyper_command_aliases() {
+    assert_eq!(
+        integration_target_command_names(crate::api::schema::IntegrationTarget::Grok),
+        &["grok", "hyper", "hyper-build"][..]
+    );
+    assert_eq!(
+        integration_target_command(crate::api::schema::IntegrationTarget::Grok),
+        "grok"
+    );
+}
+
+#[test]
+#[cfg(not(windows))]
+fn grok_integration_is_available_when_hyper_is_on_path() {
+    let _lock = integration_env_lock();
+    let base = unique_base();
+    let bin = base.join("bin");
+    fs::create_dir_all(&bin).unwrap();
+    let hyper = bin.join("hyper");
+    fs::write(&hyper, "").unwrap();
+    make_executable(&hyper).unwrap();
+    let original_path = std::env::var_os("PATH");
+    std::env::set_var("PATH", &bin);
+
+    assert!(integration_target_available(
+        crate::api::schema::IntegrationTarget::Grok
+    ));
+
+    if let Some(path) = original_path {
+        std::env::set_var("PATH", path);
+    } else {
+        std::env::remove_var("PATH");
+    }
+    let _ = fs::remove_dir_all(base);
+}
+
+#[test]
 fn enforce_agent_version_warns_when_binary_missing() {
     let requirement = AgentVersionRequirement {
         label: "kimi code",
