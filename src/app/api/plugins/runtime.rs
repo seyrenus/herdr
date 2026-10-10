@@ -46,7 +46,7 @@ impl App {
             ("HERDR_PLUGIN_ID".to_string(), plugin.plugin_id.clone()),
             ("HERDR_PLUGIN_CONTEXT_JSON".to_string(), context_json),
         ]);
-        if let Ok(current_exe) = std::env::current_exe() {
+        if let Ok(current_exe) = crate::platform::launch_executable() {
             env.push((
                 "HERDR_BIN_PATH".to_string(),
                 current_exe.display().to_string(),
@@ -119,12 +119,12 @@ impl App {
         self.state.plugin_commands_in_flight += 1;
         let event_tx = self.event_tx.clone();
         std::thread::spawn(move || {
-            let child = crate::plugin_command::command_for_argv(&program, &args)
-                .current_dir(plugin_root)
-                .envs(env)
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn();
+            let child =
+                crate::plugin_command::command_for_argv_in_dir(&program, &args, &plugin_root)
+                    .envs(env)
+                    .stdout(Stdio::piped())
+                    .stderr(Stdio::piped())
+                    .spawn();
             let finished = match child {
                 Ok(mut child) => {
                     let stdout = child.stdout.take();
